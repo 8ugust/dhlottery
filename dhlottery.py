@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from configparser import ConfigParser
 from selenium import webdriver
 import time
 
@@ -13,7 +14,7 @@ import time
 # =================== =================== ===================
 
 chrome_options = Options()
-chrome_options.add_argument("headless")
+# chrome_options.add_argument("headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--log-level=3')
 chrome_options.add_experimental_option("detach", True)
@@ -37,11 +38,16 @@ login_form = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'form')
 form_pw = wait.until(EC.visibility_of_element_located((By.NAME, 'password')))
 form_id = wait.until(EC.visibility_of_element_located((By.NAME, 'userId')))
 button = login_form.find_element(By.TAG_NAME, 'a')
-form_pw.send_keys('')
-form_id.send_keys('')
+
+config = ConfigParser()
+config.read('./conf.ini')
+id = config['lottery']['id']
+pw = config['lottery']['pw']
+
+form_id.send_keys(id)
+form_pw.send_keys(pw)
 button.click()
 time.sleep(1)
-
 
 
 
