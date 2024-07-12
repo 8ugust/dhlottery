@@ -14,7 +14,7 @@ import time
 # =================== =================== ===================
 
 chrome_options = Options()
-# chrome_options.add_argument("headless")
+chrome_options.add_argument("headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--log-level=3')
 chrome_options.add_experimental_option("detach", True)
@@ -73,6 +73,26 @@ driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
 # =================== =================== ===================
 # Change Iframe
 # =================== =================== ===================
+iframe = wait.until(EC.visibility_of_element_located((By.ID, 'ifrm_tab')))
+driver.switch_to.frame(iframe)
 
 
+
+
+
+# =================== =================== ===================
+# Auto Check & Buy Game
+# =================== =================== ===================
+ticket  = wait.until(EC.visibility_of_element_located((By.ID, 'divWay2Buy1')))
+setNum  = wait.until(EC.visibility_of_element_located((By.ID, 'btnSelectNum')))
+buyBtn  = wait.until(EC.visibility_of_element_located((By.ID, 'btnBuy')))
+btnWrap = ticket.find_element(By.CLASS_NAME, 'action')
+label = btnWrap.find_element(By.TAG_NAME, 'label')
+
+label.click()
+setNum.click()
+buyBtn.click()
+
+confirm = wait.until(EC.visibility_of_element_located((By.ID, 'popupLayerConfirm')))
+confirm.find_elements(By.TAG_NAME, 'input')[0].click()
 
