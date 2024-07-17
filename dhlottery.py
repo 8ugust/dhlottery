@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from configparser import ConfigParser
 from selenium import webdriver
+import datetime
 import time
 
 # =================== =================== =================== ===================
@@ -14,7 +15,7 @@ import time
 # =================== =================== ===================
 
 chrome_options = Options()
-chrome_options.add_argument("headless")
+# chrome_options.add_argument("headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--log-level=3')
 chrome_options.add_experimental_option("detach", True)
@@ -54,7 +55,7 @@ time.sleep(1)
 
 
 # =================== =================== ===================
-# Close Popup & Open Lotto Game
+# Close Popup
 # =================== =================== ===================
 parent = driver.current_window_handle
 uselessWindows = driver.window_handles
@@ -62,8 +63,25 @@ for window in uselessWindows:
     if window != parent:
         driver.switch_to.window(window)
         driver.close()
-        
+
 driver.switch_to.window(parent)
+
+
+
+
+# =================== =================== ===================
+# Check Remain Money
+# =================== =================== ===================
+# cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
+# money = cMoney.find_element(By.TAG_NAME, 'strong')
+
+
+
+
+
+
+        
+
 driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
 
 
@@ -96,3 +114,20 @@ buyBtn.click()
 confirm = wait.until(EC.visibility_of_element_located((By.ID, 'popupLayerConfirm')))
 confirm.find_elements(By.TAG_NAME, 'input')[0].click()
 
+
+
+
+
+# =================== =================== ===================
+# Record Lotto Number
+# =================== =================== ===================
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+nums = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'nums')))
+spans = nums.find_elements(By.TAG_NAME, 'span')
+
+number = '[Log][' + now + '] Number : '
+for span in spans:
+    print(span.get_attribute('innerHTML'))
+    number += span.get_attribute('innerHTML') + "\t"
+
+print(number)
