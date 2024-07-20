@@ -5,8 +5,13 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from configparser import ConfigParser
 from selenium import webdriver
+from PIL import Image
+import pytesseract
 import datetime
+import requests
 import time
+import io
+
 
 # =================== =================== =================== ===================
 # =================== =================== =================== ===================
@@ -15,17 +20,16 @@ import time
 # =================== =================== ===================
 
 chrome_options = Options()
-# chrome_options.add_argument("headless")
+chrome_options.add_argument("headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--log-level=3')
 chrome_options.add_experimental_option("detach", True)
-chrome_options.add_argument('--blink-settings=imagesEnabled=false')
 
 caps = DesiredCapabilities().CHROME
 caps["pageLoadStrategy"] = "none"
 
 driver = webdriver.Chrome(options=chrome_options)
-driver.get(url='https://www.dhlottery.co.kr/user.do?method=login&returnUrl=')
+driver.get(url='https://dhlottery.co.kr/user.do?method=login&returnUrl=/payment.do?method=payment&returnFlag=N')
 
 
 
@@ -56,15 +60,17 @@ time.sleep(1)
 
 # =================== =================== ===================
 # Close Popup
+# Deprecated : Not Used in Payment Method View.
 # =================== =================== ===================
-parent = driver.current_window_handle
-uselessWindows = driver.window_handles
-for window in uselessWindows:
-    if window != parent:
-        driver.switch_to.window(window)
-        driver.close()
+# parent = driver.current_window_handle
+# uselessWindows = driver.window_handles
+# for window in uselessWindows:
+#     if window != parent:
+#         driver.switch_to.window(window)
+#         driver.close()
 
-driver.switch_to.window(parent)
+# driver.switch_to.window(parent)
+
 
 
 
@@ -72,10 +78,40 @@ driver.switch_to.window(parent)
 # =================== =================== ===================
 # Check Remain Money
 # =================== =================== ===================
-# cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
-# money = cMoney.find_element(By.TAG_NAME, 'strong')
+cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
+money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
+money = money.replace(',', '').replace('원', '')
+
+if money == "9000":
+    btnWrap = wait.until(EC.visibility_of_element_located((By.ID, 'btn2')))
+    btn = btnWrap.find_element(By.TAG_NAME, 'button')
+    btn.click()
+    time.sleep(1)
+
+    # Switch Current Window to Check
+    parent = driver.current_window_handle
+    for window in driver.window_handles:
+        if window != parent:
+            driver.switch_to.window(window)
+
+    # Get Password Keypad Image
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Users\gks83\AppData\Local\tesseract.exe'
+    kpdImg = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'kpd-image-button')))
+    response = requests.get(kpdImg.get_attribute('src'))
+    img = Image.open(io.BytesIO(response.content))
+
+    # Keypad to Array
+    txt = pytesseract.image_to_string(img, config='--psm 6')
+    txtArr = txt.split("\n")
+    print(txt)
+    print(txtArr)
 
 
+
+
+
+
+exit()
 
 
 
