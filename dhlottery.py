@@ -81,6 +81,7 @@ time.sleep(1)
 # =================== =================== ===================
 # Check Remain Money
 # =================== =================== ===================
+print(driver.current_url)
 cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
 money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
 money = money.replace(',', '').replace('원', '')
