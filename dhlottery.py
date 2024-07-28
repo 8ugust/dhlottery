@@ -2,6 +2,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from configparser import ConfigParser
 from selenium import webdriver
@@ -10,6 +12,7 @@ import pytesseract
 import datetime
 import requests
 import time
+import re
 import io
 
 
@@ -48,6 +51,7 @@ config = ConfigParser()
 config.read('./conf.ini')
 id = config['lottery']['id']
 pw = config['lottery']['pw']
+fa = config['lottery']['fa']
 
 form_id.send_keys(id)
 form_pw.send_keys(pw)
@@ -68,7 +72,6 @@ time.sleep(1)
 #     if window != parent:
 #         driver.switch_to.window(window)
 #         driver.close()
-
 # driver.switch_to.window(parent)
 
 
@@ -82,13 +85,14 @@ cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
 money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
 money = money.replace(',', '').replace('원', '')
 
-if money == "9000":
+if money == "30000":
+    Select(wait.until(EC.visibility_of_element_located((By.ID, 'EcAmt')))).select_by_value('5000')
     btnWrap = wait.until(EC.visibility_of_element_located((By.ID, 'btn2')))
     btn = btnWrap.find_element(By.TAG_NAME, 'button')
     btn.click()
     time.sleep(1)
 
-    # Switch Current Window to Check
+    # Switch Current Window to Popup
     parent = driver.current_window_handle
     for window in driver.window_handles:
         if window != parent:
@@ -97,28 +101,24 @@ if money == "9000":
     # Get Password Keypad Image
     pytesseract.pytesseract.tesseract_cmd = r'C:\Users\gks83\AppData\Local\tesseract.exe'
     kpdImg = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'kpd-image-button')))
+    keypad = wait.until(EC.visibility_of_any_elements_located((By.CLASS_NAME, 'kpd-data')))
     response = requests.get(kpdImg.get_attribute('src'))
     img = Image.open(io.BytesIO(response.content))
 
     # Keypad to Array
     txt = pytesseract.image_to_string(img, config='--psm 6')
-    txtArr = txt.split("\n")
-    print(txt)
-    print(txtArr)
+    txtArr = re.findall(r'\d', txt)
+    numbers = sorted(set(txtArr), key=txtArr.index)
 
-
-
-
-
-
-exit()
-
-
-
-
-        
-
-driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
+    keypad = list(filter(lambda pad: pad.get_attribute('data-action').split(":")[0] == 'data', keypad))
+    for factor in fa:
+        for idx, num in enumerate(numbers):
+            if factor == num:
+                keypad[idx].click()
+    
+    time.sleep(1)
+    Alert(driver).accept()
+    driver.switch_to.window(parent)
 
 
 
@@ -127,6 +127,7 @@ driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
 # =================== =================== ===================
 # Change Iframe
 # =================== =================== ===================
+driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
 iframe = wait.until(EC.visibility_of_element_located((By.ID, 'ifrm_tab')))
 driver.switch_to.frame(iframe)
 
@@ -158,12 +159,12 @@ confirm.find_elements(By.TAG_NAME, 'input')[0].click()
 # Record Lotto Number
 # =================== =================== ===================
 now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-nums = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'nums')))
-spans = nums.find_elements(By.TAG_NAME, 'span')
+report = wait.until(EC.visibility_of_element_located((By.ID, 'reportRow')))
+spans = report.find_element(By.CLASS_NAME, 'nums').find_elements(By.TAG_NAME, 'span')
 
 number = '[Log][' + now + '] Number : '
 for span in spans:
     print(span.get_attribute('innerHTML'))
-    number += span.get_attribute('innerHTML') + "\t"
+    number += span.get_attribute('innerHTML') + " "
 
 print(number)
