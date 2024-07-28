@@ -41,7 +41,7 @@ driver.get(url='https://dhlottery.co.kr/user.do?method=login&returnUrl=/payment.
 # =================== =================== ===================
 # Login
 # =================== =================== ===================
-wait = WebDriverWait(driver, 5)
+wait = WebDriverWait(driver, 10)
 login_form = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'form')))
 form_pw = wait.until(EC.visibility_of_element_located((By.NAME, 'password')))
 form_id = wait.until(EC.visibility_of_element_located((By.NAME, 'userId')))
