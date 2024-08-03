@@ -82,7 +82,7 @@ cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
 money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
 money = money.replace(',', '').replace('원', '')
 
-if money <= "50000":
+if money <= "5000":
 
     sender = 'gks83123@gmail.com'
     receiver = 'gks831@kakao.com'
