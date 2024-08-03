@@ -103,7 +103,6 @@ try:
 
         server.sendmail(sender, receiver, msg.as_string())
         server.quit()
-        exit()
 
         # Select(wait.until(EC.visibility_of_element_located((By.ID, 'EcAmt')))).select_by_value('5000')
         # btnWrap = wait.until(EC.visibility_of_element_located((By.ID, 'btn2')))
