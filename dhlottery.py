@@ -39,7 +39,7 @@ try:
     # =================== =================== ===================
     # Login
     # =================== =================== ===================
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 5)
     login_form = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'form')))
     form_pw = wait.until(EC.visibility_of_element_located((By.NAME, 'password')))
     form_id = wait.until(EC.visibility_of_element_located((By.NAME, 'userId')))
@@ -82,7 +82,7 @@ try:
     money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
     money = money.replace(',', '').replace('원', '')
 
-    if money <= 5000:
+    if money == "0":
 
         sender = 'gks83123@gmail.com'
         receiver = 'gks831@kakao.com'
