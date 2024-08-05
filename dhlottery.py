@@ -65,12 +65,14 @@ time.sleep(5)
 # =================== =================== ===================
 parent = driver.current_window_handle
 uselessWindows = driver.window_handles
+print(driver.current_url)
+
 for window in uselessWindows:
+    print(window.title)
     if window != parent:
         driver.switch_to.window(window)
         driver.close()
 driver.switch_to.window(parent)
-print(driver.current_url)
 
 
 
