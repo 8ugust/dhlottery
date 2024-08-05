@@ -70,6 +70,7 @@ for window in uselessWindows:
         driver.switch_to.window(window)
         driver.close()
 driver.switch_to.window(parent)
+print(driver.current_url)
 
 
 
