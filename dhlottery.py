@@ -53,7 +53,7 @@ pw = config['lottery']['pw']
 form_id.send_keys(id)
 form_pw.send_keys(pw)
 button.click()
-time.sleep(1)
+time.sleep(5)
 
 
 
