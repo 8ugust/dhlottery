@@ -81,6 +81,7 @@ try:
     cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
     money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
     money = money.replace(',', '').replace('원', '')
+    print("[Log] Login Success")
 
     if money == "0":
 
@@ -148,6 +149,7 @@ try:
     driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
     iframe = wait.until(EC.visibility_of_element_located((By.ID, 'ifrm_tab')))
     driver.switch_to.frame(iframe)
+    print("[Log] Enter the Game")
 
 
 
@@ -168,6 +170,7 @@ try:
 
     confirm = wait.until(EC.visibility_of_element_located((By.ID, 'popupLayerConfirm')))
     confirm.find_elements(By.TAG_NAME, 'input')[0].click()
+    print("[Log] Buy Success")
 
 
 
@@ -182,10 +185,9 @@ try:
 
     number = '[Log][' + now + '] Number : '
     for span in spans:
-        print(span.get_attribute('innerHTML'))
         number += span.get_attribute('innerHTML') + " "
 
     print(number)
 
-except:
-    exit()
+except Exception as e:
+    print(e)
