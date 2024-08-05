@@ -63,16 +63,16 @@ time.sleep(5)
 # Close Popup
 # Deprecated : Not Used in Payment Method View.
 # =================== =================== ===================
-# parent = driver.current_window_handle
-# uselessWindows = driver.window_handles
-# print(driver.current_url)
+parent = driver.current_window_handle
+uselessWindows = driver.window_handles
+print(uselessWindows)
 
-# for window in uselessWindows:
-#     print(window.title)
-#     if window != parent:
-#         driver.switch_to.window(window)
-#         driver.close()
-# driver.switch_to.window(parent)
+for window in uselessWindows:
+    print(window.title)
+    if window != parent:
+        driver.switch_to.window(window)
+        driver.close()
+driver.switch_to.window(parent)
 
 
 
@@ -81,32 +81,32 @@ time.sleep(5)
 # =================== =================== ===================
 # Check Remain Money
 # =================== =================== ===================
-# cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
-# money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
-# money = money.replace(',', '').replace('원', '')
-# print("[Log] Login Success")
+cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
+money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
+money = money.replace(',', '').replace('원', '')
+print("[Log] Login Success")
 
-# if money == "0":
+if money == "0":
 
-#     sender = 'gks83123@gmail.com'
-#     receiver = 'gks831@kakao.com'
+    sender = 'gks83123@gmail.com'
+    receiver = 'gks831@kakao.com'
 
-#     msg = MIMEText("잔액이 부족합니다.")
-#     msg['Subject'] = "[DHL] 잔액부족 알림"
-#     msg['From'] = sender
-#     msg['To'] = receiver
+    msg = MIMEText("잔액이 부족합니다.")
+    msg['Subject'] = "[DHL] 잔액부족 알림"
+    msg['From'] = sender
+    msg['To'] = receiver
 
-#     config = ConfigParser()
-#     config.read('conf.ini')
-#     email = config['gmail']['email']
-#     pswrd = config['gmail']['pswrd']
+    config = ConfigParser()
+    config.read('conf.ini')
+    email = config['gmail']['email']
+    pswrd = config['gmail']['pswrd']
 
-#     server = smtplib.SMTP('smtp.gmail.com', 587)
-#     server.starttls()
-#     server.login(email, pswrd)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, pswrd)
 
-#     server.sendmail(sender, receiver, msg.as_string())
-#     server.quit()
+    server.sendmail(sender, receiver, msg.as_string())
+    server.quit()
 
     # Select(wait.until(EC.visibility_of_element_located((By.ID, 'EcAmt')))).select_by_value('5000')
     # btnWrap = wait.until(EC.visibility_of_element_located((By.ID, 'btn2')))
