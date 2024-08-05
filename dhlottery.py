@@ -54,6 +54,7 @@ form_id.send_keys(id)
 form_pw.send_keys(pw)
 button.click()
 time.sleep(5)
+print(driver.current_url)
 
 
 
@@ -65,10 +66,9 @@ time.sleep(5)
 # =================== =================== ===================
 parent = driver.current_window_handle
 uselessWindows = driver.window_handles
-print(uselessWindows)
+time.sleep(5)
 
 for window in uselessWindows:
-    print(window.title)
     if window != parent:
         driver.switch_to.window(window)
         driver.close()
