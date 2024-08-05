@@ -54,7 +54,6 @@ form_id.send_keys(id)
 form_pw.send_keys(pw)
 button.click()
 time.sleep(5)
-print(driver.current_url)
 
 
 
@@ -64,16 +63,13 @@ print(driver.current_url)
 # Close Popup
 # Deprecated : Not Used in Payment Method View.
 # =================== =================== ===================
-parent = driver.current_window_handle
-uselessWindows = driver.window_handles
-time.sleep(5)
-print(uselessWindows)
-
-for window in uselessWindows:
-    if window != parent:
-        driver.switch_to.window(window)
-        driver.close()
-driver.switch_to.window(parent)
+# parent = driver.current_window_handle
+# uselessWindows = driver.window_handles
+# for window in uselessWindows:
+#     if window != parent:
+#         driver.switch_to.window(window)
+#         driver.close()
+# driver.switch_to.window(parent)
 
 
 
@@ -82,32 +78,32 @@ driver.switch_to.window(parent)
 # =================== =================== ===================
 # Check Remain Money
 # =================== =================== ===================
-cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
-money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
-money = money.replace(',', '').replace('원', '')
-print("[Log] Login Success")
+# cMoney = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'money')))
+# money = cMoney.find_element(By.TAG_NAME, 'strong').get_attribute('innerHTML')
+# money = money.replace(',', '').replace('원', '')
+# print("[Log] Login Success")
 
-if money == "0":
+# if money == "0":
 
-    sender = 'gks83123@gmail.com'
-    receiver = 'gks831@kakao.com'
+#     sender = 'gks83123@gmail.com'
+#     receiver = 'gks831@kakao.com'
 
-    msg = MIMEText("잔액이 부족합니다.")
-    msg['Subject'] = "[DHL] 잔액부족 알림"
-    msg['From'] = sender
-    msg['To'] = receiver
+#     msg = MIMEText("잔액이 부족합니다.")
+#     msg['Subject'] = "[DHL] 잔액부족 알림"
+#     msg['From'] = sender
+#     msg['To'] = receiver
 
-    config = ConfigParser()
-    config.read('conf.ini')
-    email = config['gmail']['email']
-    pswrd = config['gmail']['pswrd']
+#     config = ConfigParser()
+#     config.read('conf.ini')
+#     email = config['gmail']['email']
+#     pswrd = config['gmail']['pswrd']
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(email, pswrd)
+#     server = smtplib.SMTP('smtp.gmail.com', 587)
+#     server.starttls()
+#     server.login(email, pswrd)
 
-    server.sendmail(sender, receiver, msg.as_string())
-    server.quit()
+#     server.sendmail(sender, receiver, msg.as_string())
+#     server.quit()
 
     # Select(wait.until(EC.visibility_of_element_located((By.ID, 'EcAmt')))).select_by_value('5000')
     # btnWrap = wait.until(EC.visibility_of_element_located((By.ID, 'btn2')))
@@ -151,6 +147,8 @@ if money == "0":
 # Change Iframe
 # =================== =================== ===================
 driver.get(url='https://el.dhlottery.co.kr/game/TotalGame.jsp?LottoId=LO40')
+time.sleep(10)
+
 iframe = wait.until(EC.visibility_of_element_located((By.ID, 'ifrm_tab')))
 driver.switch_to.frame(iframe)
 print("[Log] Enter the Game")
