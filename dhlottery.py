@@ -67,6 +67,7 @@ print(driver.current_url)
 parent = driver.current_window_handle
 uselessWindows = driver.window_handles
 time.sleep(5)
+print(uselessWindows)
 
 for window in uselessWindows:
     if window != parent:
