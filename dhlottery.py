@@ -56,7 +56,7 @@ try:
     config.read('./conf.ini')
     id = config['lottery']['id']
     pw = config['lottery']['pw']
-    fa = config['lottery']['fa']
+    
 
     form_id.send_keys(id)
     form_pw.send_keys(pw)
